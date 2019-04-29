@@ -1,34 +1,102 @@
-<?PHP
-class commande{
-	private $id;
-	private $id_client;
-	private $total;
-    
-    function __construct($id,$id_client,$total)
-    {
-		$this->id=$id;
-		$this->id_client=$id_client;
-		$this->total=$total;
-	}
-	
-	function getid(){
-		return $this->id;
-	}
-	function getid_client(){
-		return $this->id_client;
-	}
-	function gettotal(){
-		return $this->total;
-	}
-	
-    function setid_client($id_client){
-		$this->id_client=$id_client;
-	}
-	function set_total($total){
-		$this->total=$total;
-	}
-	
-	
-}
+<?php
+class commande
+{
+	//private $idCommande;
+	private $dateCommande;
+	private $montantCommande;
+	private $etatCommande;
+	private $lieuLivraison;
+	private $prixLivraison;
+	private $idClient;
 
+		public function __construct($dateCommande,$montantCommande,$etatCommande,$lieuLivraison,$prixLivraison,$idClient)
+		{
+			//$this->idCommande=$idCommande;
+			$this->dateCommande=$dateCommande;
+			$this->montantCommande=$montantCommande;
+			$this->etatCommande=$etatCommande;
+			$this->lieuLivraison=$lieuLivraison;
+			$this->prixLivraison=$prixLivraison;
+			$this->idClient=$idClient;
+		}
+
+		/*public function get_idCommande()
+		{
+			return $this->idCommande;
+		}*/
+
+		/*public function set_idCommande($idCommande)
+		{
+			$this->idCommande = $idCommande;
+		}*/
+		//====================================
+
+
+		public function get_dateCommande()
+		{
+			return $this->dateCommande;
+		}
+
+		public function set_dateCommande($dateCommande)
+		{
+			$this->dateCommande = $dateCommande;
+		}
+		//=====================================
+
+
+		public function get_montantCommande()
+		{
+			return $this->montantCommande;
+		}
+
+		public function set_montantCommande($montantCommande)
+		{
+			$this->montantCommande = $montantCommande;
+		}
+		//======================================
+
+
+		public function get_lieuLivraison()
+		{
+			return $this->lieuLivraison;
+		}
+
+		public function set_lieuLivraison($lieuLivraison)
+		{
+			$this->lieuLivraison = $prixLivraison;
+		}
+		//========================================
+
+		public function get_prixLivraison()
+		{
+			return $this->prixLivraison;
+		}
+
+		public function set_prixLivraison($prixLivraison)
+		{
+			$this->prixLivraison = $prixLivraison;
+		}
+		//====================================
+
+
+		public function get_idClient()
+		{
+			return $this->idClient;
+		}
+
+		public function set_idClient($idClient)
+		{
+			$this->idClient = $idClient;
+		}
+		//=============================
+		public function get_etatCommande()
+		{
+			return $this->etatCommande;
+		}
+
+		public function set_etatCommande($lieuLivraison)
+		{
+			$this->etatCommande = $etatCommande;
+		}
+}	
 ?>

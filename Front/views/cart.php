@@ -1,14 +1,22 @@
-<?PHP
-include "core/panierP.php";
-$panierP1=new panierP();
-$listepanier=$panierP1->afficherpaniers();
-?>
+<?php
+include "../entities/produit.php";
+include "../core/produitC.php";
+include_once "../core/commandeC.php";
+session_start();
+$_SESSION['id']=2;
+if(isset($_SESSION['id']))
+{
+  $produit=new produitC;
+  $count=$produit->countpanier($_SESSION['id']);
+?> 
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <title>Makhla</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700" rel="stylesheet">
@@ -36,7 +44,7 @@ $listepanier=$panierP1->afficherpaniers();
 
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light ftco-navbar-light-2" id="ftco-navbar">
 	    <div class="container">
-                            <a class="navbar-brand" href="./"><img src="images/logooriginal2.png" alt="Logo"></a>
+	      <a class="navbar-brand" href="index.html">Makhla</a>
 	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 	        <span class="oi oi-menu"></span> Menu
 	      </button>
@@ -45,31 +53,39 @@ $listepanier=$panierP1->afficherpaniers();
 	        <ul class="navbar-nav ml-auto">
 	          <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
 	          <li class="nav-item dropdown active">
-              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
-              <div class="dropdown-menu" aria-labelledby="dropdown04">
-              	<a class="dropdown-item" href="shop.html">Shop</a>
-                <a class="dropdown-item" href="product-single.html">Single Product</a>
-                <a class="dropdown-item" href="cart.html">Cart</a>
-                <a class="dropdown-item" href="checkout.html">Checkout</a>
-              </div>
-            </li>
-	          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+            <li class="nav-item"><a href="shop.php" class="nav-link">Shop</a></li>
+	          <li class="nav-item"><a href="wishlist.php" class="nav-link">Wishlist</a></li>
 	          <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
-	          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-	          <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
+            <li class="nav-item"><a href="session.html" class="nav-link">Administrateur</a></li>
+	          <li class="nav-item cta cta-colored"><a href="cart.php" class="nav-link"><span class="icon-shopping_cart"></span>
+			  											     <?php
+					          $produit=new produitC;
+					          $count=$produit->countpanier($_SESSION['id']);
+					          foreach($count as $row)
+					            {
+					              echo $row["cnt"];
+					            }
+                         ?>
+			  </a></li>
+ <div><?php if (isset($_SESSION['l']) && isset($_SESSION['p'])) 
+{ 
 
+     echo ' <b> '.$_SESSION['l'].'</b> <br>';  
+    echo '<a href="./logout.php">Se Déconnecter</a>';
+
+}?></div>
 	        </ul>
 	      </div>
 	    </div>
 	  </nav>
     <!-- END nav -->
 		
-		<div class="hero-wrap hero-bread" style="background-image: url('images/Shooting3.jpg');">
+		<div class="hero-wrap hero-bread" style="background-image: url('images/produit3.jpg');">
       <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
           <div class="col-md-9 ftco-animate text-center">
-            <h1 class="mb-0 bread">font color="white"><strong>My Cart</strong></font><</h1>
-            <p class="breadcrumbs"><span class="mr-2"><a href="index.html"></a><font color="white"><strong>Home</strong></font></span> <span><font color="white"><strong>Cart</strong></font></span></p>
+            <h1 class="mb-0 bread"><font color="white"><strong>My Cart</strong></h1>
+            <p class="breadcrumbs"><span class="mr-2"><a href="index.html"><font color="white"><strong>Home</strong></a></span> <span><a href="shop.php"><font color="white"><strong>Shop</a></strong></span></p>
           </div>
         </div>
       </div>
@@ -92,202 +108,70 @@ $listepanier=$panierP1->afficherpaniers();
 						      </tr>
 						    </thead>
 						    <tbody>
-						      <tr class="text-center">
-						        <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
-						        
-						        <td class="image-prod"><div class="img" style="background-image:url(images/produit1.jpeg);"></div></td>
-						        
-						        <td class="product-name">
-						        	<h3>Classic Bag</h3>
-						        	<p>Far far away, behind the word mountains, far from the countries</p>
-						        </td>
-						        
-						        <td class="price">$30</td>
-						        
-						        <td class="quantity">
-						        	<div class="input-group mb-3">
-					             	<input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
-					          	</div>
-					          </td>
-						        
-						        <td class="total">$30</td>
-						      </tr><!-- END TR-->
 
+				<?php
+				    $c=intval($row["cnt"]);
+				    if($c==0)
+				     {
+				?>
+				<tr class="text-center">
+				<h1>VIDE</h1>
+				</tr>
+				<?php  
+				                             }
+					 				if($c!=0)
+			                                 {
+									$produit=new produitC();
+				                    $listeproduits=$produit->afficherproduits();
+                                    foreach($listeproduits as $row){
+                                    $id=$row['id'];
+                                    $chemin="picproduct/produit".$id.".jpg"
+				                        ?>
 						      <tr class="text-center">
-						        <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
+						        <td class="product-remove">
+								<form method="POST" action="supprimerproduit.php">
+                <button name="supprimer" class="btn btn-primary py-3 px-4"><span class="ion-ios-close"></span></button>
+								        <input type="hidden" value="<?PHP echo $row['id']; ?>" name="id">  
+								</form>
+								</td>
 						        
-						        <td class="image-prod"><div class="img" style="background-image:url(images/product-4.jpg);"></div></td>
+						        <td class="image-prod"><div class="img" style="background-image:url(<?php echo $chemin; ?>);"></div></td>
 						        
 						        <td class="product-name">
-						        	<h3>Young Woman Wearing Dress</h3>
+						        	<h3><?PHP echo $row['nom']; ?></h3>
 						        	<p>Far far away, behind the word mountains, far from the countries</p>
 						        </td>
 						        
-						        <td class="price">$15.70</td>
-						        
+						        <td class="price"><?PHP echo $row['prix']; ?></td>
+						        	 <form method="POST" action="modifierproduit.php">
 						        <td class="quantity">
 						        	<div class="input-group mb-3">
-					             	<input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
+					             	<input type="text" name="quantite" class="quantity form-control input-number" value="<?PHP echo $row['quantite']; ?>" min="1" max="100">
 					          	</div>
 					          </td>
 						        
-						        <td class="total">$15.70</td>
+						        <td class="total">
+<input type="hidden" value="<?PHP echo $row['id']; ?>" name="id"> 
+              <button name="Modifier" class="btn btn-primary py-3 px-4">modifer</button>
+								</td>
+									 </form>
 						      </tr><!-- END TR-->
+							  						  <?PHP
+				}}
+?>
 						    </tbody>
 						  </table>
 					  </div>
     			</div>
     		</div>
-    		<div class="row justify-content-end">
-    			<div class="col col-lg-5 col-md-6 mt-5 cart-wrap ftco-animate">
-    				<div class="cart-total mb-3">
-    					<h3>Cart Totals</h3>
-    					<p class="d-flex">
-    						<span>Subtotal</span>
-    						<span>$20.60</span>
-    					</p>
-    					<p class="d-flex">
-    						<span>Delivery</span>
-    						<span>$0.00</span>
-    					</p>
-    					<p class="d-flex">
-    						<span>Discount</span>
-    						<span>$3.00</span>
-    					</p>
-    					<hr>
-    					<p class="d-flex total-price">
-    						<span>Total</span>
-    						<span>$17.60</span>
-    					</p>
-    				</div>
-    				<p class="text-center"><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
+
+    				<p class="text-center"><a href="command.php" class="btn btn-primary py-3 px-4">     Valider             </a></p>
     			</div>
     		</div>
 			</div>
 		</section>
 
-    <section class="ftco-section bg-light">
-    	<div class="container">
-				<div class="row justify-content-center mb-3 pb-3">
-          <div class="col-md-12 heading-section text-center ftco-animate">
-          	<h1 class="big">Products</h1>
-            <h2 class="mb-4">Related Products</h2>
-          </div>
-        </div>    		
-    	</div>
-    	<div class="container-fluid">
-    		<div class="row">
-    			<div class="col-sm col-md-6 col-lg ftco-animate">
-    				<div class="product">
-    					<a href="#" class="img-prod"><img class="img-fluid" src="images/product-1.jpg" alt="Colorlib Template"></a>
-    					<div class="text py-3 px-3">
-    						<h3><a href="#">Young Woman Wearing Dress</a></h3>
-    						<div class="d-flex">
-    							<div class="pricing">
-		    						<p class="price"><span>$120.00</span></p>
-		    					</div>
-		    					<div class="rating">
-	    							<p class="text-right">
-	    								<span class="ion-ios-star-outline"></span>
-	    								<span class="ion-ios-star-outline"></span>
-	    								<span class="ion-ios-star-outline"></span>
-	    								<span class="ion-ios-star-outline"></span>
-	    								<span class="ion-ios-star-outline"></span>
-	    							</p>
-	    						</div>
-	    					</div>
-	    					<hr>
-    						<p class="bottom-area d-flex">
-    							<a href="#" class="add-to-cart"><span>Add to cart <i class="ion-ios-add ml-1"></i></span></a>
-    							<a href="#" class="ml-auto"><span><i class="ion-ios-heart-empty"></i></span></a>
-    						</p>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-sm col-md-6 col-lg ftco-animate">
-    				<div class="product">
-    					<a href="#" class="img-prod"><img class="img-fluid" src="images/product-2.jpg" alt="Colorlib Template"></a>
-    					<div class="text py-3 px-3">
-    						<h3><a href="#">Young Woman Wearing Dress</a></h3>
-    						<div class="d-flex">
-    							<div class="pricing">
-		    						<p class="price"><span>$120.00</span></p>
-		    					</div>
-		    					<div class="rating">
-	    							<p class="text-right">
-	    								<span class="ion-ios-star-outline"></span>
-	    								<span class="ion-ios-star-outline"></span>
-	    								<span class="ion-ios-star-outline"></span>
-	    								<span class="ion-ios-star-outline"></span>
-	    								<span class="ion-ios-star-outline"></span>
-	    							</p>
-	    						</div>
-	    					</div>
-	    					<hr>
-    						<p class="bottom-area d-flex">
-    							<a href="#" class="add-to-cart"><span>Add to cart <i class="ion-ios-add ml-1"></i></span></a>
-    							<a href="#" class="ml-auto"><span><i class="ion-ios-heart-empty"></i></span></a>
-    						</p>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-sm col-md-6 col-lg ftco-animate">
-    				<div class="product">
-    					<a href="#" class="img-prod"><img class="img-fluid" src="images/product-3.jpg" alt="Colorlib Template"></a>
-    					<div class="text py-3 px-3">
-    						<h3><a href="#">Young Woman Wearing Dress</a></h3>
-    						<div class="d-flex">
-    							<div class="pricing">
-		    						<p class="price"><span>$120.00</span></p>
-		    					</div>
-		    					<div class="rating">
-	    							<p class="text-right">
-	    								<span class="ion-ios-star-outline"></span>
-	    								<span class="ion-ios-star-outline"></span>
-	    								<span class="ion-ios-star-outline"></span>
-	    								<span class="ion-ios-star-outline"></span>
-	    								<span class="ion-ios-star-outline"></span>
-	    							</p>
-	    						</div>
-	    					</div>
-	    					<hr>
-    						<p class="bottom-area d-flex">
-    							<a href="#" class="add-to-cart"><span>Add to cart <i class="ion-ios-add ml-1"></i></span></a>
-    							<a href="#" class="ml-auto"><span><i class="ion-ios-heart-empty"></i></span></a>
-    						</p>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-sm col-md-6 col-lg ftco-animate">
-    				<div class="product">
-    					<a href="#" class="img-prod"><img class="img-fluid" src="images/product-4.jpg" alt="Colorlib Template"></a>
-    					<div class="text py-3 px-3">
-    						<h3><a href="#">Young Woman Wearing Dress</a></h3>
-    						<div class="d-flex">
-    							<div class="pricing">
-		    						<p class="price"><span>$120.00</span></p>
-		    					</div>
-		    					<div class="rating">
-	    							<p class="text-right">
-	    								<span class="ion-ios-star-outline"></span>
-	    								<span class="ion-ios-star-outline"></span>
-	    								<span class="ion-ios-star-outline"></span>
-	    								<span class="ion-ios-star-outline"></span>
-	    								<span class="ion-ios-star-outline"></span>
-	    							</p>
-	    						</div>
-	    					</div>
-	    					<hr>
-    						<p class="bottom-area d-flex">
-    							<a href="#" class="add-to-cart"><span>Add to cart <i class="ion-ios-add ml-1"></i></span></a>
-    							<a href="#" class="ml-auto"><span><i class="ion-ios-heart-empty"></i></span></a>
-    						</p>
-    					</div>
-    				</div>
-    			</div>
-    		</div>
-    	</div>
-    </section>
+   
 
 		<section class="ftco-section-parallax">
       <div class="parallax-img d-flex align-items-center">
@@ -440,3 +324,8 @@ $listepanier=$panierP1->afficherpaniers();
     
   </body>
 </html>
+<?php
+
+}
+
+?>
