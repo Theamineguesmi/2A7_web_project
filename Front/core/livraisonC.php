@@ -12,7 +12,7 @@ function afficherlivraison ($livraison){
 	}
 
 	function ajouterlivraison($livraison){
-		$sql="insert into livraison (cin,nom,prenom,ville,mail,postal) values (:cin, :nom,:prenom,:ville,:mail,:postal)";
+		$sql="insert into livraison (cin,nom,prenom,ville,mail,postal,etat) values (:cin, :nom,:prenom,:ville,:mail,:postal,0)";
 		$db = config::getConnexion();
 		try{
         $req=$db->prepare($sql);
