@@ -1,14 +1,9 @@
 <?PHP
-include_once "commandeC.php";
-include_once "commande.php";
-session_start();
-$_SESSION['id']=2;
-if(isset($_SESSION['id']))
-{
-           
-$commande1C=new commandeC();
-$commandes=$commande1C->recuperercommandes();
+include "clientC.php";
+$client1C=new clientC();
+$list=$client1C->afficherclients();
 
+//var_dump($listeEmployes->fetchAll());
 ?>
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
@@ -21,7 +16,7 @@ $commandes=$commande1C->recuperercommandes();
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Makhla</title>
+    <title>Sufee Admin - HTML5 Admin Template</title>
     <meta name="description" content="Sufee Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -44,7 +39,8 @@ $commandes=$commande1C->recuperercommandes();
 
 <body>
     <!-- Left Panel -->
- <aside id="left-panel" class="left-panel">
+
+        <aside id="left-panel" class="left-panel">
         <nav class="navbar navbar-expand-sm navbar-default">
 
             <div class="navbar-header">
@@ -90,24 +86,23 @@ $commandes=$commande1C->recuperercommandes();
 
     <!-- Right Panel -->
 
-   <div id="right-panel" class="right-panel">
+    <div id="right-panel" class="right-panel">
 
         <!-- Header-->
         <header id="header" class="header">
 
             <div class="header-menu">
 
-              <div class="col-sm-7">
+                <div class="col-sm-7">
                     <a id="menuToggle" class="menutoggle pull-left"><i class="fa fa fa-tasks"></i></a>
                     <div class="header-left">
                         <button class="search-trigger"><i class="fa fa-search"></i></button>
-            <!--           <div class="form-inline">
+                        <div class="form-inline">
                             <form class="search-form">
-                               <input class="form-control mr-sm-2" type="text" placeholder="Search ..." aria-label="Search">
+                                <input class="form-control mr-sm-2" type="text" placeholder="Search ..." aria-label="Search">
                                 <button class="search-close" type="submit"><i class="fa fa-close"></i></button>
-                              
                             </form>
-                        </div>-->
+                        </div>
 
                         <div class="dropdown for-notification">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="notification" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -241,73 +236,129 @@ $commandes=$commande1C->recuperercommandes();
             </div>
         </div>
 
-       <div class="row">
-            <div class="col-lg-12">
-            </div>
-        </div><!--/.row-->
-        <div class="row">
-            <div class="col-lg-12">
-                  <div class="box-body">
-              <div class="box">
-            <!-- /.box-header -->
-            <div class="box-body">
-              <div class="content">
-            <div class="container-fluid">
+        <div class="content mt-3">
+            <div class="animated fadeIn">
                 <div class="row">
+
                     <div class="col-md-12">
                         <div class="card">
-                            <div class="card-header" data-background-color="blue">
-                                <h4 class="title">Les Commandes</h4>
+                            <div class="card-header">
+                                <strong class="card-title">Afficher</strong>
                             </div>
-                            <div class="card-content table-responsive">
-                                <table class="table">
-                                    <thead class="text-info">
-                                    <th><font color="black">ID Client</font></th>
-                                    <th><font color="black">ID Commande</font></th>
-                                    <th><font color="black">Date Commande</font></th>
-                                    <th><font color="black">Total</font></th>
-                                    <th><font color="black">Adresse</font></th>
+                            <div class="card-body">
+                                <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>nom</th>
+                                            <th>prenom</th>
+                                            <th>email</th>
+                                            <th>date</th>
+                                            <th>idClient</th>
+                                            <th>supprimer</th>
+                                            <th>carte</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    <?php foreach ($commandes as $row)
-                                     {
-                                    ?>
-                                    <tr>
+                                    <?PHP
+                                            foreach($list as $row){
+                                        ?>
+                                        <tr class="gradeA">
+                                            <td><?PHP echo $row['nom']; ?></td>
+                                            <td><?PHP echo $row['prenom']; ?></td>
+                                            <td><?PHP echo $row['email']; ?></td>
+                                            <td><?PHP echo $row['date']; ?></td>
+                                            <td><?PHP echo $row['id_client']; ?></td>
 
-                                        <td><?php echo $row["idClient"] ; ?></td>
-                                        <td><?php echo $row["idCommande"] ; ?></a></td>
+                                            <td>
+                                                
+                <form method="POST" action="deleteclient.php">
+                <input type="submit" name="supprimer" value="supprimer">
+                <input type="hidden" value="<?PHP echo $row['email']; ?>" name="email"></form>
+                
 
-
-
-                                        <td><?php echo $row["dateCommande"] ; ?></td>
-                                        <td><?php echo $row["montantCommande"]." TND" ; ?></td>
-                                        
-                                        <td><?php echo $row["lieuLivraison"] ; ?></td>
-                                       
-                                                  
-
-                                          <td>
-
- 
-
-                                          
-                                          </tr>
-                                        
-
-                                    </tr>
-                                    <?php } ?>
+  </td>
+  <td><a href="ajoutercarte.php?email=<?PHP echo $row['email']; ?>">
+    carte fidélité</a></td>                         
+                                        </tr>
+                                <?php } ?>
                                     </tbody>
+                                    
                                 </table>
-                                <br><a href="imprimer.php" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print"></span> PDF</a></br>
                             </div>
-                        </div>
-                    </div>
+
+                        
+                  
+                        </section>
+                                   <form method="POST" action="modifierclient.php">
+                    
+                                <section class="panel">
+                                    <header class="panel-heading">
+                                        <div class="panel-actions">
+                                            <a href="#" class="fa fa-caret-down"></a>
+                                            
+                                        </div>
+
+                                        <h2 class="panel-title">Modify an order</h2> 
+
+                                        
+                                    </header>
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <div class="validation-message">
+                                            <ul></ul>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">Modify <span class="required">*</span></label>
+                                            <div class="col-sm-9">
+                                                <select name="modwith" onchange="ModifSelect()" id="selectmodif">
+                                                <option>Please select .. </option>
+                                                <option value="nom">nom</option>
+                                                <option value="prenom">prenom</option>
+                                                <option value="email">email</option>
+                                                <option value="mdp">mdp</option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">Order's refrence  <span class="required">*</span></label>
+                                            <div class="col-sm-9">
+                                            <input type="text" name="ref" class="form-control" title="Plase enter the refrence." placeholder="the refrence is .." required="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">New value <span class="required">*</span></label>
+                                            <div class="col-sm-9">
+                                            <input type="text" name="new" class="form-control" title="Plase enter the new value.." placeholder="the new  value is .." required="">
+                                            </div>
+                                        </div>
+                                        
+                                        </div>
+                                        
+                                    </div>
+                                    <footer class="panel-footer">
+                                        <div class="row">
+                                            <div class="col-sm-9 col-sm-offset-3">
+                                                <button class="btn btn-primary">Modify</button>
+                                                <button type="reset" class="btn btn-default">Reset</button>
+                                            </div>
+                                        </div>
+                                    </footer>
+                                </section>
+                            </form>
+                           
+                        
+                    <!-- end: page -->
+                </section>
+
                 </div>
-            </div>
-        </div>
-            </div>
-            </div>
-        </div><!--/.row-->      
+            </div><!-- .animated -->
+        </div><!-- .content -->
+
+
+    </div><!-- /#right-panel -->
+
     <!-- Right Panel -->
 
 
@@ -333,6 +384,3 @@ $commandes=$commande1C->recuperercommandes();
 </body>
 
 </html>
-<?php
-  }
-?>
